@@ -294,7 +294,7 @@ if __name__== '__main__':
     functions validation: generate data from multivariate gaussian and 
     check marginal_p_x, responsibility and _M_step outcome (should give true results)
     """
-    K = 1
+    K = 3
     n_samples = 1000
     n_features = 2
     
