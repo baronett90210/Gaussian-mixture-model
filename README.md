@@ -1,5 +1,5 @@
 Here, I have implemented Gaussian mixture model by means of Expectation Maximization (EM) algorithm according to the famous C. Bishop's book [1]
-The Gaussian mixture probability distribution can be written as a superpositions of multivariate Gaussians:
+The Gaussian mixture probability distribution can be written as a superposition of multivariate Gaussians:
 
 $$
 \begin{align} 
@@ -7,9 +7,17 @@ p(x) = \sum\limits_{k=1}^{K} \pi_k\ \mathcal{N}(x|\mu_k,\Sigma_k)
 \end{align}
 $$
 
-where $\pi_k$ are mixing coefficients and $\mu_k,\ \Sigma_k$ are mean vectors and covariance matrices of Gaussian constituents. Our task is given the observations $X = {x_1, x_2,..., x_N}$, infer the parameters $\pi_k,\ \mu_k,\ \Sigma_k$.
+where $\sum\limits_{k=1}^{K}\pi_k = 1$ are mixing coefficients and $\mu_k,\ \Sigma_k$ are mean vectors and covariance matrices of Gaussian constituents. Our task is given the observations $X = {x_1, x_2,..., x_N}$, infer the parameters $\pi_k,\ \mu_k,\ \Sigma_k$.
 
-To do this, we treat the Gaussian constituents as binary latent variables $Z = {z_1,..., z_n}$ where $z_k$ is a $K$-dimensional vector where only one component is equal to 1 and others are 0. Now, we can formulate the joint likelyhood function: 
+To do this, we treat the Gaussian constituents as binary latent variables $Z = {z_1,..., z_n}$ where $z_k$ is a $K$-dimensional vector where only one component is equal to 1 and others are 0. The graphical model is presented below
+
+$\displaylines{}$ 
+<p align="center">
+<img src = "https://github.com/baronett90210/Gaussian-mixture-model/assets/136889949/901eb3df-b938-42ec-b098-f4143ea2a113" width="250" height="200">
+</p>
+
+
+Now, we can formulate the joint likelyhood function: 
 
 $$
 \begin{align} 
@@ -33,10 +41,26 @@ $$
 \end{align}
 $$
 
-Here, $\gamma(z_{nk})$ denotes the responsibility of a Gaussian constituent $k$ for a data point $n$.
+Here, $\gamma(z_{nk})$ denotes the responsibility of a Gaussian constituent $k$ for a data point $n$. The M-step maximizes the expected value w.r.t. the parameteres which leads to the following iterative updates: 
+
 $$
 \begin{align} 
-E-step
+\mu_k^{new} = \frac{1}{N_k}\sum\limits_{n=1}^{N} {\gamma(z_{nk}) x_n} 
 \end{align}
 $$
+
+$$
+\begin{align}
+\Sigma_k^{new} = \frac{1}{N_k}\sum\limits_{n=1}^{N}\gamma(z_{nk})(x_n-\mu_k^{new})(x_n-\mu_k^{new})^T 
+\end{align}
+$$
+
+$$
+\begin{align}
+\pi_k^{new} = \frac{N_k}{N}
+\end{align}
+$$
+
+where $N_k=\sum\limits_{n=1}^{N}\gamma(z_{nk})$ - expected number of points assigned to kth cluster.
+
 [1] C. Bishop, Pattern Recognition and Machine Learning (Information Science and Statistics). New York: Springer-Verlag, 2006.
